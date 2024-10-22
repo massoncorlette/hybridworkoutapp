@@ -1,3 +1,7 @@
+https://developers.strava.com/docs/reference/#api-Athletes-getLoggedInAthlete
+
+https://developers.strava.com/docs/reference/
+
 ## Overview
 This template is set up with Webpack, Babel, and essential plugins to start a modern JavaScript project.
 

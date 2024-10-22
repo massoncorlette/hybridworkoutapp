@@ -9,5 +9,6 @@ export function setupDOM() {
       appContainer.innerHTML = '<h2>Welcome to my project!</h2>';
     }
     // additional DOM ...
+    
 
   }
