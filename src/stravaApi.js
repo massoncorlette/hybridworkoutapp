@@ -5,9 +5,9 @@
 export let stravaUserInfo = function(load) {
   const clientId = "117917";
   const clientSecret = "a830f572e6291e2f35635914b6a682eecbda64c1";
-  const redirectUri = "http://localhost:3000/exchange_token"; // Change this when going live 
-  const scope = "read activity:read_all"; // The scopes define what data you want access to
-  const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
+  const redirectUri = "http://localhost:9000/"; // Change this when going live 
+  const scope = "activity:read_all"; // The scopes define what data you want access to
+  const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${encodeURIComponent(scope)}`;
   
   // get access token for each instance user logs in
   async function exchangeToken(authCode) {
@@ -61,14 +61,14 @@ export let stravaUserInfo = function(load) {
       } else {
         console.error("Strava login button not found in the DOM.");
       }
+      const urlParams = new URLSearchParams(window.location.search);
+      const authorizationCode = urlParams.get('code');
+      
+      if (authorizationCode) {
+        exchangeToken(authorizationCode);
+      }
     });
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const authorizationCode = urlParams.get('code');
-    
-    if (authorizationCode) {
-      exchangeToken(authorizationCode);
-    }
+  
   }
   
   return {
