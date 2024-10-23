@@ -4,6 +4,14 @@ https://developers.strava.com/docs/reference/#api-Athletes-getLoggedInAthlete
 
 https://developers.strava.com/docs/reference/
 
+
+
+Graphical representations for zone training,pacing,weight lifting vs running, ect. 
+
+
+Feedback logic from Notifactions
+Mobile friendly
+
 ## Overview
 This template is set up with Webpack, Babel, and essential plugins to start a modern JavaScript project.
 

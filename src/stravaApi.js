@@ -1,4 +1,4 @@
-
+import { sortUserData } from "./logic";
 // will have to figure logic for external users, involving node.js backend security
 // for now have my own values to use
 
@@ -27,6 +27,9 @@ export let stravaUserInfo = function(load) {
     const data = await response.json();
     if (data.access_token) {
       console.log("Access Token:", data.access_token);
+      const accessToken = data.access_token;
+      let allActivitiesData = getAllStravaActivities(accessToken);
+      sortUserData(allActivitiesData);
       // Save or use the access token as needed
     } else {
       console.error("Failed to get access token:", data);
@@ -49,7 +52,39 @@ export let stravaUserInfo = function(load) {
       console.error('Error fetching activities:', error);
     }
   }
-  // if load means user login or signup
+
+  async function getAllStravaActivities(token) {
+    let allActivities = [];
+    let page = 1;
+    let perPage = 200; 
+  
+    while (true) {
+      try {
+        const response = await fetch(`https://www.strava.com/api/v3/athlete/activities?page=${page}&per_page=${perPage}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+  
+        const data = await response.json();
+  
+        if (data.length === 0) {
+          break;
+        }
+        allActivities = allActivities.concat(data);
+        page++;
+  
+      } catch (error) {
+        console.error('Error fetching activities:', error);
+        break;
+      }
+    }
+  
+    console.log('All Activities:', allActivities);
+    return allActivities;
+  }
+  // if load true, means user login or signup
   if (load) {
     // maybe have a user login page, this listener as the entry point ?
     document.addEventListener('DOMContentLoaded', () => {
@@ -74,6 +109,7 @@ export let stravaUserInfo = function(load) {
   return {
     exchangeToken:exchangeToken,
     getStravaActivities:getStravaActivities,
+    getAllStravaActivities:getAllStravaActivities,
     clientId,
     clientSecret, // security risk for now
     redirectUri,
