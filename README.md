@@ -1,3 +1,5 @@
+https://developers.strava.com/docs/authentication/ (developer manual for authentication for strava)
+
 https://developers.strava.com/docs/reference/#api-Athletes-getLoggedInAthlete
 
 https://developers.strava.com/docs/reference/
