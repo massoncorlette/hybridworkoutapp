@@ -1,6 +1,7 @@
 import { sortUserData } from "./logic";
 // will have to figure logic for external users, involving node.js backend security
 // for now have my own values to use
+// May need 'cors' mode for api calls for security????
 
 export let stravaUserInfo = function(load) {
   const clientId = "117917";
@@ -49,7 +50,7 @@ export let stravaUserInfo = function(load) {
       console.log(error);
     }
   }
-  
+
   // return Promise object
   async function getStravaActivities(token) {
     try {
@@ -118,7 +119,6 @@ export let stravaUserInfo = function(load) {
         exchangeToken(authorizationCode);
       }
     });
-  
   }
   
   return {
