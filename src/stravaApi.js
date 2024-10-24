@@ -28,15 +28,29 @@ export let stravaUserInfo = function(load) {
     if (data.access_token) {
       console.log("Access Token:", data.access_token);
       const accessToken = data.access_token;
-      let allActivitiesData = getAllStravaActivities(accessToken);
-      sortUserData(allActivitiesData);
+      
+      let activityType = 'all';
+      
+      queryForData(accessToken,activityType);
       // Save or use the access token as needed
     } else {
       console.error("Failed to get access token:", data);
     }
   }
+
+  // dealing with Promise object
+  async function queryForData(accessToken,activitesType) { 
+    try {
+      if (activitesType === 'all') {
+        const athleteData = await getAllStravaActivities(accessToken);
+        sortUserData(athleteData);
+      }
+    } catch(error) {
+      console.log(error);
+    }
+  }
   
-  // get Promise object
+  // return Promise object
   async function getStravaActivities(token) {
     try {
       const response = await fetch('https://www.strava.com/api/v3/athlete/activities', {
@@ -53,6 +67,7 @@ export let stravaUserInfo = function(load) {
     }
   }
 
+  // return Promise object
   async function getAllStravaActivities(token) {
     let allActivities = [];
     let page = 1;
@@ -111,7 +126,7 @@ export let stravaUserInfo = function(load) {
     getStravaActivities:getStravaActivities,
     getAllStravaActivities:getAllStravaActivities,
     clientId,
-    clientSecret, // security risk for now
+    clientSecret, // returning this is a security risk ..for now
     redirectUri,
     scope
   }
