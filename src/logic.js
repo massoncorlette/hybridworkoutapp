@@ -8,7 +8,7 @@ export function initializeApp() {
   }
 
   // getting the data from Api call logic
-  export function sortUserData(data) {
+  export function sortUserWorkouts(data) {
     let runData = [];
     let liftData = [];
     let otherSports = [];
@@ -25,4 +25,8 @@ export function initializeApp() {
     console.log(runData);
     console.log(liftData);
     console.log(otherSports);
+  }
+
+  export function userData(data) {
+    console.log(data);
   }

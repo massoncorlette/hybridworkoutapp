@@ -1,10 +1,11 @@
-import { sortUserData } from "./logic";
+import { sortUserWorkouts, userData } from "./logic";
 // will have to figure logic for external users, involving node.js backend security
 // for now have my own values to use
 // May need 'cors' mode for api calls for security????
 
 export let stravaUserInfo = function(load) {
   const clientId = "117917";
+  let athleteId = null;
   const clientSecret = "a830f572e6291e2f35635914b6a682eecbda64c1";
   const redirectUri = "http://localhost:9000/"; // Change this when going live 
   const scope = "activity:read_all"; // The scopes define what data you want access to
@@ -29,6 +30,9 @@ export let stravaUserInfo = function(load) {
     if (data.access_token) {
       console.log("Access Token:", data.access_token);
       const accessToken = data.access_token;
+
+      //authenticated returned athlete id
+      athleteId = data.id;
       
       let activityType = 'all';
       
@@ -44,7 +48,13 @@ export let stravaUserInfo = function(load) {
     try {
       if (activitesType === 'all') {
         const athleteData = await getAllStravaActivities(accessToken);
-        sortUserData(athleteData);
+        const athleteStats = await getAthleteStats(accessToken);
+        const athleteSegs = await getSegments(accessToken);
+
+        sortUserWorkouts(athleteData);
+        userData(athleteStats);
+        userData(athleteSegs);
+        
       }
     } catch(error) {
       console.log(error);
@@ -100,6 +110,34 @@ export let stravaUserInfo = function(load) {
     console.log('All Activities:', allActivities);
     return allActivities;
   }
+
+  async function getAthleteStats(token) {
+    
+    const response = await fetch(`https://www.strava.com/api/v3/athletes/${athleteId}/stats`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    const stats = await response.json();
+    console.log(stats);
+  }  
+
+  async function getSegments(token) {
+    
+    const response = await fetch('https://www.strava.com/api/v3/segments/starred', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    const segments = await response.json();
+    console.log(segments);
+  }
+
+
   // if load true, means user login or signup
   if (load) {
     // maybe have a user login page, this listener as the entry point ?
@@ -125,12 +163,13 @@ export let stravaUserInfo = function(load) {
     exchangeToken:exchangeToken,
     getStravaActivities:getStravaActivities,
     getAllStravaActivities:getAllStravaActivities,
+    getAthleteStats:getAthleteStats,
+    getSegments:getSegments,
     clientId,
     clientSecret, // returning this is a security risk ..for now
     redirectUri,
     scope
   }
-
 }
 
 
