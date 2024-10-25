@@ -1,4 +1,4 @@
-import { sortUserWorkouts, userData } from "./logic";
+import { sortUserWorkouts } from "./logic";
 // will have to figure logic for external users, involving node.js backend security
 // for now have my own values to use
 // May need 'cors' mode for api calls for security????
@@ -31,10 +31,12 @@ export let stravaUserInfo = function(load) {
       console.log("Access Token:", data.access_token);
       const accessToken = data.access_token;
       
+      const athleteProfile = await getAthleteProfile(accessToken);
+      athleteId = athleteProfile.id;
+            
       let activityType = 'all';
       
       queryForData(accessToken,activityType);
-      // Save or use the access token as needed
     } else {
       console.error("Failed to get access token:", data);
     }
@@ -45,13 +47,12 @@ export let stravaUserInfo = function(load) {
     try {
       if (activitesType === 'all') {
         const athleteData = await getAllStravaActivities(accessToken);
-        athleteId = athleteData[0].athlete.id;
         const athleteStats = await getAthleteStats(accessToken);
         const athleteSegs = await getSegments(accessToken);
 
         sortUserWorkouts(athleteData);
-        userData(athleteStats);
-        userData(athleteSegs);
+        console.log(athleteStats);
+        console.log(athleteSegs);
         
       }
     } catch(error) {
@@ -59,7 +60,7 @@ export let stravaUserInfo = function(load) {
     }
   }
 
-  // async functions all returning promise Object
+  // async functions all returning promise Objects
   async function getAthleteProfile(token) {
     const response = await fetch('https://www.strava.com/api/v3/athlete', {
       method: 'GET',
@@ -70,7 +71,7 @@ export let stravaUserInfo = function(load) {
     
     const profile = await response.json();
     console.log("Athlete Profile:", profile);
-    return profile; // returns profile id
+    return profile; 
   }
 
   async function getStravaActivities(token) {
@@ -102,7 +103,6 @@ export let stravaUserInfo = function(load) {
             'Authorization': `Bearer ${token}`,
           },
         });
-  
         const data = await response.json();
   
         if (data.length === 0) {
@@ -129,11 +129,11 @@ export let stravaUserInfo = function(load) {
         'Authorization': `Bearer ${token}`
       }
     });
-    
     const stats = await response.json();
-    console.log(stats);
+    return stats;
   }  
 
+  // recent workout data + totals
   async function getSegments(token) {
     
     const response = await fetch('https://www.strava.com/api/v3/segments/starred', {
@@ -142,12 +142,9 @@ export let stravaUserInfo = function(load) {
         'Authorization': `Bearer ${token}`
       }
     });
-    
     const segments = await response.json();
-    console.log(segments);
+    return segments;
   }
-
-
   // if load true, means user login or signup
   if (load) {
     // maybe have a user login page, this listener as the entry point ?
@@ -171,6 +168,7 @@ export let stravaUserInfo = function(load) {
   
   return {
     exchangeToken:exchangeToken,
+    getAthleteProfile:getAthleteProfile,
     getStravaActivities:getStravaActivities,
     getAllStravaActivities:getAllStravaActivities,
     getAthleteStats:getAthleteStats,

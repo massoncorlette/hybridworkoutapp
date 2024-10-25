@@ -26,7 +26,3 @@ export function initializeApp() {
     console.log(liftData);
     console.log(otherSports);
   }
-
-  export function userData(data) {
-    console.log(data);
-  }
