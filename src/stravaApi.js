@@ -30,9 +30,6 @@ export let stravaUserInfo = function(load) {
     if (data.access_token) {
       console.log("Access Token:", data.access_token);
       const accessToken = data.access_token;
-
-      //authenticated returned athlete id
-      athleteId = data.id;
       
       let activityType = 'all';
       
@@ -48,6 +45,7 @@ export let stravaUserInfo = function(load) {
     try {
       if (activitesType === 'all') {
         const athleteData = await getAllStravaActivities(accessToken);
+        athleteId = athleteData[0].athlete.id;
         const athleteStats = await getAthleteStats(accessToken);
         const athleteSegs = await getSegments(accessToken);
 
@@ -61,7 +59,20 @@ export let stravaUserInfo = function(load) {
     }
   }
 
-  // return Promise object
+  // async functions all returning promise Object
+  async function getAthleteProfile(token) {
+    const response = await fetch('https://www.strava.com/api/v3/athlete', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+    
+    const profile = await response.json();
+    console.log("Athlete Profile:", profile);
+    return profile; // returns profile id
+  }
+
   async function getStravaActivities(token) {
     try {
       const response = await fetch('https://www.strava.com/api/v3/athlete/activities', {
@@ -78,7 +89,6 @@ export let stravaUserInfo = function(load) {
     }
   }
 
-  // return Promise object
   async function getAllStravaActivities(token) {
     let allActivities = [];
     let page = 1;
