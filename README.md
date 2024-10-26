@@ -4,6 +4,20 @@ https://developers.strava.com/docs/reference/#api-Athletes-getLoggedInAthlete
 
 https://developers.strava.com/docs/reference/
 
+/running & lifting properties I want to use
+.name (given name for exercise)
+.distance
+.total_elevation_gain
+.has_heartrate (true/false)
+.average_heartrate
+.max_heartrate
+.moving_time
+.pr_count
+.average_temp
+.type ("WeightTraining", "Run", etc.)
+.start_date
+.timezone
+
 
 
 Graphical representations for zone training,pacing,weight lifting vs running, ect. 

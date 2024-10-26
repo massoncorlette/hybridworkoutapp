@@ -26,3 +26,5 @@ export function initializeApp() {
     console.log(liftData);
     console.log(otherSports);
   }
+
+ 
