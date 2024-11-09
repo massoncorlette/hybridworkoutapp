@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "webpack",
     "start": "webpack serve --mode development",
     "liveview": "git subtree push --prefix dist origin gh-pages",
@@ -14,10 +14,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.25.8",
-    "@babel/preset-env": "^7.25.8",
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "babel-jest": "^29.7.0",
     "babel-loader": "^9.2.1",
     "html-webpack-plugin": "^5.6.2",
+    "jest": "^29.7.0",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.2"
